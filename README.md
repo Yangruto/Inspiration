@@ -1,0 +1,2 @@
+# Inspiration
+Weird, sudden ideas
