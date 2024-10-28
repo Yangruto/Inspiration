@@ -95,7 +95,7 @@ def clean_subtitle(data:pd.DataFrame) -> pd.DataFrame:
     data = data.applymap(lambda x: re.sub('\（.*\）', '', x))
     data = data.applymap(lambda x: re.sub('_|-', '', x))
     data = data.applymap(lambda x: x.strip())
-    for i in ['【', '】', '\[', ' \]', '\'', '\"', '”', '“']:
+    for i in ['【', '】', '\[', '\]', '\'', '\"', '”', '“', '\(', '\)']:
         data['question'] = data['question'].apply(lambda x: re.sub(i, '', x))
         data['answer'] = data['answer'].apply(lambda x: re.sub(i, '', x))
     data = data.loc[(data['question'].notnull()) & (data['answer'].notnull())]
@@ -121,6 +121,7 @@ if __name__ == "__main__":
         subtitle = pd.concat([subtitle, tmp_subtitle])
     subtitle = subtitle[['content', 'next_content', 'movie_name']]
     subtitle.columns = ['question', 'answer', 'movie_name']
+    subtitle.to_csv('tmp_subtitle.csv', index=False)
     subtitle = clean_subtitle(subtitle)
     subtitle = word_segmentation(subtitle, ['question', 'answer'])
     subtitle.to_csv('subtitle.csv', index=False)
